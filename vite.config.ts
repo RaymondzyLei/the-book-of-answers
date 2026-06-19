@@ -1,9 +1,11 @@
+import { existsSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 function getBase(): string {
+  // Custom domain via CNAME → serve from root.
+  if (existsSync('./CNAME')) return '/';
   // Auto-detect repo name from GITHUB_REPOSITORY env (set by GitHub Actions).
-  // Locally, falls back to '/' for normal dev work.
   const repo = process.env.GITHUB_REPOSITORY;
   if (!repo) return '/';
   const name = repo.split('/')[1];

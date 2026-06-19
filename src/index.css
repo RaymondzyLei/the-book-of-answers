@@ -17,23 +17,36 @@
     -moz-osx-font-smoothing: grayscale;
     background: linear-gradient(
       var(--bg-angle, 135deg),
-      #e0f2fe 0%,
-      #f0f9ff 50%,
-      #ffffff 100%
+      var(--bg-stop-1, #e0f2fe) 0%,
+      var(--bg-stop-2, #f0f9ff) 50%,
+      var(--bg-stop-3, #ffffff) 100%
     );
     background-attachment: fixed;
+    background-size: 200% 200%;
+    background-position: 0% 50%;
     overflow-x: hidden;
     transition: color 400ms ease, background-color 400ms ease;
+    animation: bg-drift 120s ease-in-out infinite;
   }
 
   html.dark body {
     color: theme('colors.slate.100');
     background: linear-gradient(
       var(--bg-angle, 135deg),
-      #0f172a 0%,
-      #1e293b 50%,
-      #0c4a6e 100%
+      var(--bg-stop-1, #0f172a) 0%,
+      var(--bg-stop-2, #1e293b) 50%,
+      var(--bg-stop-3, #0c4a6e) 100%
     );
+  }
+
+  @keyframes bg-drift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
 
   body::before {
@@ -86,56 +99,28 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    /* === Form: only shape transitions (width / height / border-radius) === */
     .glass-card.is-shrinking {
       width: clamp(80px, 18vw, 112px);
       height: clamp(80px, 18vw, 112px);
       min-height: clamp(80px, 18vw, 112px);
       border-radius: 50%;
-      background: linear-gradient(
-        135deg,
-        rgba(186, 230, 253, 0.85) 0%,
-        rgba(56, 189, 248, 0.75) 50%,
-        rgba(14, 165, 233, 0.65) 100%
-      );
-      box-shadow:
-        0 0 60px 10px rgba(56, 189, 248, 0.45),
-        inset 0 0 20px rgba(255, 255, 255, 0.35);
       transition:
         width 500ms cubic-bezier(0.33, 1, 0.68, 1),
         height 500ms cubic-bezier(0.33, 1, 0.68, 1),
         min-height 500ms cubic-bezier(0.33, 1, 0.68, 1),
-        border-radius 500ms cubic-bezier(0.33, 1, 0.68, 1),
-        background 500ms cubic-bezier(0.7, 0, 0.84, 0),
-        box-shadow 500ms cubic-bezier(0.7, 0, 0.84, 0);
-    }
-
-    html.dark .glass-card.is-shrinking {
-      background: linear-gradient(
-        135deg,
-        rgba(56, 189, 248, 0.75) 0%,
-        rgba(125, 211, 252, 0.65) 50%,
-        rgba(186, 230, 253, 0.55) 100%
-      );
-      box-shadow:
-        0 0 60px 12px rgba(14, 165, 233, 0.55),
-        inset 0 0 20px rgba(186, 230, 253, 0.25);
+        border-radius 500ms cubic-bezier(0.33, 1, 0.68, 1);
     }
 
     .glass-card.is-expanding {
       width: 100%;
       min-height: 60vh;
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.55);
-      box-shadow:
-        0 8px 32px rgba(15, 23, 42, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.7);
       transition:
         width 500ms cubic-bezier(0.7, 0, 0.84, 0),
         height 500ms cubic-bezier(0.7, 0, 0.84, 0),
         min-height 500ms cubic-bezier(0.7, 0, 0.84, 0),
-        border-radius 500ms cubic-bezier(0.7, 0, 0.84, 0),
-        background 500ms cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 500ms cubic-bezier(0.16, 1, 0.3, 1);
+        border-radius 500ms cubic-bezier(0.7, 0, 0.84, 0);
     }
 
     @media (min-width: 768px) {
@@ -145,11 +130,109 @@
       }
     }
 
-    html.dark .glass-card.is-expanding {
-      background: rgba(15, 23, 42, 0.45);
-      box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(148, 163, 184, 0.12);
+    /* === Color: 5-stop keyframes (cold-white → cyan/sky → indigo → cyan/sky → cold-white) === */
+    .glass-card.is-morphing {
+      animation: morph-color 1000ms ease-in-out forwards;
+    }
+
+    @keyframes morph-color {
+      0% {
+        background: rgba(255, 255, 255, 0.55);
+        box-shadow:
+          0 8px 32px rgba(15, 23, 42, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      }
+      25% {
+        background: linear-gradient(
+          135deg,
+          rgba(186, 230, 253, 0.6) 0%,
+          rgba(103, 232, 249, 0.5) 50%,
+          rgba(56, 189, 248, 0.45) 100%
+        );
+        box-shadow:
+          0 0 30px 4px rgba(56, 189, 248, 0.25),
+          inset 0 0 12px rgba(255, 255, 255, 0.3);
+      }
+      50% {
+        background: linear-gradient(
+          135deg,
+          rgba(165, 180, 252, 0.85) 0%,
+          rgba(99, 102, 241, 0.8) 50%,
+          rgba(56, 189, 248, 0.7) 100%
+        );
+        box-shadow:
+          0 0 60px 10px rgba(99, 102, 241, 0.45),
+          inset 0 0 20px rgba(255, 255, 255, 0.35);
+      }
+      75% {
+        background: linear-gradient(
+          135deg,
+          rgba(186, 230, 253, 0.6) 0%,
+          rgba(103, 232, 249, 0.5) 50%,
+          rgba(56, 189, 248, 0.45) 100%
+        );
+        box-shadow:
+          0 0 30px 4px rgba(56, 189, 248, 0.25),
+          inset 0 0 12px rgba(255, 255, 255, 0.3);
+      }
+      100% {
+        background: rgba(255, 255, 255, 0.55);
+        box-shadow:
+          0 8px 32px rgba(15, 23, 42, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      }
+    }
+
+    html.dark .glass-card.is-morphing {
+      animation-name: morph-color-dark;
+    }
+
+    @keyframes morph-color-dark {
+      0% {
+        background: rgba(15, 23, 42, 0.45);
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(148, 163, 184, 0.12);
+      }
+      25% {
+        background: linear-gradient(
+          135deg,
+          rgba(56, 189, 248, 0.5) 0%,
+          rgba(34, 211, 238, 0.45) 50%,
+          rgba(56, 189, 248, 0.4) 100%
+        );
+        box-shadow:
+          0 0 30px 4px rgba(14, 165, 233, 0.3),
+          inset 0 0 12px rgba(186, 230, 253, 0.15);
+      }
+      50% {
+        background: linear-gradient(
+          135deg,
+          rgba(129, 140, 248, 0.8) 0%,
+          rgba(99, 102, 241, 0.7) 50%,
+          rgba(56, 189, 248, 0.6) 100%
+        );
+        box-shadow:
+          0 0 60px 12px rgba(99, 102, 241, 0.55),
+          inset 0 0 20px rgba(186, 230, 253, 0.25);
+      }
+      75% {
+        background: linear-gradient(
+          135deg,
+          rgba(56, 189, 248, 0.5) 0%,
+          rgba(34, 211, 238, 0.45) 50%,
+          rgba(56, 189, 248, 0.4) 100%
+        );
+        box-shadow:
+          0 0 30px 4px rgba(14, 165, 233, 0.3),
+          inset 0 0 12px rgba(186, 230, 253, 0.15);
+      }
+      100% {
+        background: rgba(15, 23, 42, 0.45);
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(148, 163, 184, 0.12);
+      }
     }
   }
 
@@ -200,6 +283,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .glass-shimmer::after {
+    animation: none;
+  }
+  .glass-card.is-morphing {
+    animation: none;
+  }
+  body {
     animation: none;
   }
   *,

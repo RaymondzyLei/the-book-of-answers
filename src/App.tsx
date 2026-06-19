@@ -23,8 +23,8 @@ export default function App() {
   const shrinkTimerRef = useRef<number | null>(null);
   const expandTimerRef = useRef<number | null>(null);
 
-  useRandomBackground();
   const { theme, toggleTheme } = useTheme();
+  useRandomBackground(theme);
 
   const focusInput = useCallback(() => {
     requestAnimationFrame(() => inputRef.current?.focus());
@@ -113,6 +113,7 @@ export default function App() {
       <div className="w-full max-w-[min(100%,720px)]">
         <GlassCard
           morph={morphState}
+          isMorphing={isMorphing}
           className="relative mx-auto p-6 md:p-12 min-h-[60vh] md:min-h-[420px]
                     flex flex-col items-center justify-center gap-8 md:gap-10"
         >

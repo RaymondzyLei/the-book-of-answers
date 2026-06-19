@@ -6,6 +6,7 @@ interface GlassCardProps {
   className?: string;
   shimmer?: boolean;
   morph?: MorphState | null;
+  isMorphing?: boolean;
 }
 
 export function GlassCard({
@@ -13,11 +14,13 @@ export function GlassCard({
   className = '',
   shimmer = true,
   morph = null,
+  isMorphing = false,
 }: GlassCardProps) {
   const morphClass = morph ? `is-${morph}` : '';
+  const colorClass = isMorphing ? 'is-morphing' : '';
   return (
     <div
-      className={`glass glass-card rounded-2xl md:rounded-3xl ${morphClass} ${shimmer ? 'glass-shimmer' : ''} ${className}`}
+      className={`glass glass-card rounded-2xl md:rounded-3xl ${morphClass} ${colorClass} ${shimmer ? 'glass-shimmer' : ''} ${className}`}
     >
       {children}
     </div>

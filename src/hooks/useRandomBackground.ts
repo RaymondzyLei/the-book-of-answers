@@ -4,17 +4,17 @@ import type { Theme } from './useTheme';
 type Palette = readonly [string, string, string];
 
 const LIGHT_PALETTES: readonly Palette[] = [
-  ['#e0f2fe', '#f0f9ff', '#ffffff'],
-  ['#dbeafe', '#e0e7ff', '#e0f2fe'],
-  ['#f0f9ff', '#ecfeff', '#f5f3ff'],
-  ['#ede9fe', '#dbeafe', '#cffafe'],
+  ['#cfe1f5', '#dbeafe', '#c7d2fe'],
+  ['#cfe9f3', '#bae6fd', '#a5d8ff'],
+  ['#d4ecf7', '#cffafe', '#bae6fd'],
+  ['#e0e9f5', '#dbeafe', '#c7d2fe'],
 ];
 
 const DARK_PALETTES: readonly Palette[] = [
-  ['#0f172a', '#1e293b', '#0c4a6e'],
-  ['#0c4a6e', '#312e81', '#164e63'],
-  ['#1e3a8a', '#1e293b', '#0c4a6e'],
-  ['#0f172a', '#075985', '#1e1b4b'],
+  ['#0b1220', '#152033', '#1c2a44'],
+  ['#0d1729', '#162236', '#1c3d5a'],
+  ['#0a1424', '#152133', '#1e3a5f'],
+  ['#0c1828', '#172438', '#1d2e4a'],
 ];
 
 function buildNoiseSvg(seed: number): string {

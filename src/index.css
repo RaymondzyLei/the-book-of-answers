@@ -139,47 +139,12 @@
     pointer-events: none;
   }
 
-  .glass-shimmer {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .glass-shimmer::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.45) 50%,
-      transparent 100%
-    );
-    width: 60%;
-    height: 200%;
-    top: -50%;
-    left: -50%;
-    animation: shimmer 6s ease-in-out infinite;
-  }
-
-  html.dark .glass-shimmer::after {
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(148, 197, 233, 0.18) 50%,
-      transparent 100%
-    );
-  }
-
   .text-balance {
     text-wrap: balance;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glass-shimmer::after {
-    animation: none;
-  }
   body {
     animation: none;
   }

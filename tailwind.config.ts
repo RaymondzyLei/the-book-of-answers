@@ -48,10 +48,6 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'translateY(12px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-        shimmer: {
-          '0%': { transform: 'translateX(-100%) translateY(-100%) rotate(45deg)' },
-          '100%': { transform: 'translateX(100%) translateY(100%) rotate(45deg)' },
-        },
         'caret-blink': {
           '0%, 50%, 100%': { opacity: '1' },
           '25%, 75%': { opacity: '0' },
@@ -60,7 +56,6 @@ const config: Config = {
       animation: {
         'fade-out': 'fade-out 500ms ease-out forwards',
         'fade-in': 'fade-in 700ms ease-out forwards',
-        shimmer: 'shimmer 6s ease-in-out infinite',
         'caret-blink': 'caret-blink 1s steps(2) infinite',
       },
     },

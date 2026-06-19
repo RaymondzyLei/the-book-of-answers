@@ -10,4 +10,6 @@ export interface Answer {
   category: Category;
 }
 
-export type Phase = 'idle' | 'fading' | 'typing' | 'revealed';
+export type Phase = 'idle' | 'morphing' | 'typing' | 'revealed';
+
+export type MorphState = 'shrinking' | 'expanding';

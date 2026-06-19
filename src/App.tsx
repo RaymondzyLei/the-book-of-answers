@@ -2,8 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { GlassCard } from './components/GlassCard';
 import { QuestionInput } from './components/QuestionInput';
 import { AnswerDisplay } from './components/AnswerDisplay';
+import { SettingsPanel } from './components/SettingsPanel';
+import { SettingsToggle } from './components/SettingsToggle';
 import { ThemeToggle } from './components/ThemeToggle';
 import { pickRandomAnswer } from './data/answers';
+import { useAnswerWeights } from './hooks/useAnswerWeights';
 import { useRandomBackground } from './hooks/useRandomBackground';
 import { useTheme } from './hooks/useTheme';
 import type { MorphState, Phase } from './types';
@@ -23,8 +26,14 @@ export default function App() {
   const shrinkTimerRef = useRef<number | null>(null);
   const expandTimerRef = useRef<number | null>(null);
 
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
   const { theme, toggleTheme } = useTheme();
   useRandomBackground(theme);
+
+  const { percentages, setPercentage, setPercentages, resetPercentages, normalizedWeights } = useAnswerWeights();
+  const weightsRef = useRef(normalizedWeights);
+  weightsRef.current = normalizedWeights;
 
   const focusInput = useCallback(() => {
     requestAnimationFrame(() => inputRef.current?.focus());
@@ -78,11 +87,15 @@ export default function App() {
       setMorphState('expanding');
       expandTimerRef.current = window.setTimeout(() => {
         setMorphState(null);
-        setAnswer(pickRandomAnswer());
+        setAnswer(pickRandomAnswer(weightsRef.current));
         setPhase('typing');
       }, EXPAND_MS);
     }, SHRINK_MS);
   }, [question, phase]);
+
+  const handleBlackWhite = useCallback(() => {
+    setPercentages({ affirmative: 50, negative: 50, neutral: 0, action: 0, mysterious: 0 });
+  }, [setPercentages]);
 
   const reset = useCallback(() => {
     if (shrinkTimerRef.current !== null) {
@@ -117,9 +130,14 @@ export default function App() {
                     flex flex-col items-center justify-center gap-8 md:gap-10"
         >
           {!isMorphing && (
-            <div className="absolute top-3 right-3 md:top-5 md:right-5">
-              <ThemeToggle theme={theme} onToggle={toggleTheme} />
-            </div>
+            <>
+              <div className="absolute top-3 left-3 md:top-5 md:left-5">
+                <SettingsToggle onClick={() => setSettingsOpen(true)} />
+              </div>
+              <div className="absolute top-3 right-3 md:top-5 md:right-5">
+                <ThemeToggle theme={theme} onToggle={toggleTheme} />
+              </div>
+            </>
           )}
 
           <h1 className="sr-only">答案之书</h1>
@@ -159,6 +177,15 @@ export default function App() {
           </div>
         </GlassCard>
       </div>
+
+      <SettingsPanel
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        percentages={percentages}
+        onChange={setPercentage}
+        onReset={resetPercentages}
+        onBlackWhite={handleBlackWhite}
+      />
     </div>
   );
 }

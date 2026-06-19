@@ -1,4 +1,4 @@
-type Category = 'affirmative' | 'negative' | 'neutral' | 'action' | 'mysterious';
+export type Category = 'affirmative' | 'negative' | 'neutral' | 'action' | 'mysterious';
 
 const affirmative: string[] = [
   '毫无疑问',
@@ -236,11 +236,12 @@ const weights: Record<Category, number> = {
   mysterious: 0.1,
 };
 
-export function pickRandomAnswer(): string {
+export function pickRandomAnswer(customWeights?: Record<Category, number>): string {
+  const w = customWeights ?? weights;
   const r = Math.random();
   let acc = 0;
-  for (const category of Object.keys(weights) as Category[]) {
-    acc += weights[category];
+  for (const category of Object.keys(w) as Category[]) {
+    acc += w[category];
     if (r <= acc) {
       const pool = lists[category];
       return pool[Math.floor(Math.random() * pool.length)];

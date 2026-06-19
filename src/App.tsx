@@ -113,7 +113,6 @@ export default function App() {
       <div className="w-full max-w-[min(100%,720px)]">
         <GlassCard
           morph={morphState}
-          isMorphing={isMorphing}
           className="relative mx-auto p-6 md:p-12 min-h-[60vh] md:min-h-[420px]
                     flex flex-col items-center justify-center gap-8 md:gap-10"
         >

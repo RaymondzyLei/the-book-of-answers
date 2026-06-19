@@ -6,7 +6,7 @@ import { ThemeToggle } from './components/ThemeToggle';
 import { pickRandomAnswer } from './data/answers';
 import { useRandomBackground } from './hooks/useRandomBackground';
 import { useTheme } from './hooks/useTheme';
-import type { Answer, MorphState, Phase } from './types';
+import type { MorphState, Phase } from './types';
 
 const AUTO_RESET_MS = 3000;
 const SHRINK_MS = 500;
@@ -18,7 +18,7 @@ export default function App() {
   const [phase, setPhase] = useState<Phase>('idle');
   const [morphState, setMorphState] = useState<MorphState | null>(null);
   const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState<Answer | null>(null);
+  const [answer, setAnswer] = useState<string | null>(null);
 
   const shrinkTimerRef = useRef<number | null>(null);
   const expandTimerRef = useRef<number | null>(null);
@@ -149,7 +149,7 @@ export default function App() {
             {(phase === 'typing' || phase === 'revealed') && answer && (
               <div className="w-full animate-fade-in">
                 <AnswerDisplay
-                  text={answer.text}
+                  text={answer}
                   typing={phase === 'typing'}
                   onDoneTyping={() => setPhase('revealed')}
                   onReset={reset}

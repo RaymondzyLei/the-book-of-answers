@@ -1,4 +1,4 @@
-import type { Answer, Category } from '../types';
+type Category = 'affirmative' | 'negative' | 'neutral' | 'action' | 'mysterious';
 
 const affirmative: string[] = [
   '毫无疑问',
@@ -228,11 +228,7 @@ const lists: Record<Category, string[]> = {
   mysterious,
 };
 
-export const answers: Answer[] = (
-  Object.entries(lists) as [Category, string[]][]
-).flatMap(([category, texts]) => texts.map((text) => ({ text, category })));
-
-export const categoryWeights: Record<Category, number> = {
+const weights: Record<Category, number> = {
   affirmative: 0.15,
   negative: 0.15,
   neutral: 0.3,
@@ -240,22 +236,16 @@ export const categoryWeights: Record<Category, number> = {
   mysterious: 0.1,
 };
 
-export function pickRandomAnswer(): Answer {
+export function pickRandomAnswer(): string {
   const r = Math.random();
   let acc = 0;
-  for (const [category, weight] of Object.entries(categoryWeights) as [
-    Category,
-    number,
-  ][]) {
-    acc += weight;
+  for (const category of Object.keys(weights) as Category[]) {
+    acc += weights[category];
     if (r <= acc) {
       const pool = lists[category];
-      return { text: pool[Math.floor(Math.random() * pool.length)], category };
+      return pool[Math.floor(Math.random() * pool.length)];
     }
   }
   const fallback = lists.neutral;
-  return {
-    text: fallback[Math.floor(Math.random() * fallback.length)],
-    category: 'neutral',
-  };
+  return fallback[Math.floor(Math.random() * fallback.length)];
 }

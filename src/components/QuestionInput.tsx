@@ -4,11 +4,10 @@ interface QuestionInputProps {
   value: string;
   onChange: (v: string) => void;
   onSubmit: () => void;
-  disabled?: boolean;
 }
 
 export const QuestionInput = forwardRef<HTMLInputElement, QuestionInputProps>(
-  function QuestionInput({ value, onChange, onSubmit, disabled }, ref) {
+  function QuestionInput({ value, onChange, onSubmit }, ref) {
     const empty = !value.trim();
 
     return (
@@ -37,7 +36,6 @@ export const QuestionInput = forwardRef<HTMLInputElement, QuestionInputProps>(
             type="text"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            disabled={disabled}
             placeholder="向答案之书提问…"
             autoComplete="off"
             autoCorrect="off"
@@ -51,7 +49,7 @@ export const QuestionInput = forwardRef<HTMLInputElement, QuestionInputProps>(
           />
           <button
             type="submit"
-            disabled={disabled || empty}
+            disabled={empty}
             aria-label="提交问题"
             className="shrink-0 inline-flex items-center justify-center
                        w-10 h-10 md:w-11 md:h-11 rounded-full

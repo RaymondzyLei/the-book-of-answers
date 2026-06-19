@@ -24,7 +24,7 @@ idle → morphing → typing → revealed → idle
 
 ## The GlassCard morph is the most non-obvious code
 
-`.glass-card` morphs from a wide glass panel to a small gradient circle and back. Form and color are driven by **two separate mechanisms** that run in parallel — mixing them up will silently break either the shape or the color arc.
+`.glass-card` morphs from a wide glass panel to a small circle and back. Only **form** (width / height / border-radius) transitions; there are no color keyframes — card color stays with the static `.glass` background.
 
 ### Form (transition) — `.is-shrinking` / `.is-expanding`
 
@@ -32,17 +32,11 @@ These state classes drive `width / height / min-height / border-radius` via `tra
 
 1. **`.glass-card` must keep `width: 100%`.** The card's natural width is `auto` (inherited from the parent's `w-full max-w-[min(100%,720px)]`), and CSS cannot interpolate from `auto` to a fixed pixel value. Without the explicit `width: 100%`, the width snaps to target while height transitions smoothly — the visual you do not want.
 2. **The `transition` declaration lives on the state class (`.is-shrinking` / `.is-expanding`), not on `.glass-card`.** If it lives on the base class, the browser does not guarantee a transition fires when the class adds new values. Both state classes also have to set the full target value set themselves — `.is-expanding` must explicitly spell out the default values (`width: 100%; min-height: 60vh; border-radius: 16px` etc.) or the expand transition silently won't run.
-3. **Shrink and expand are exact mirrors.** Same 500ms duration, same start/end values, only the easing curves swap. Shrink uses `cubic-bezier(0.33, 1, 0.68, 1)` (ease-out) for size; expand uses `cubic-bezier(0.7, 0, 0.84, 0)` (ease-in). If you change one curve, change the other to keep the round-trip symmetric. **Neither class declares `background` or `box-shadow` — those are owned by `.is-morphing` keyframes below.**
+3. **Shrink and expand are exact mirrors.** Same 500ms duration, same start/end values, only the easing curves swap. Shrink uses `cubic-bezier(0.33, 1, 0.68, 1)` (ease-out) for size; expand uses `cubic-bezier(0.7, 0, 0.84, 0)` (ease-in). If you change one curve, change the other to keep the round-trip symmetric.
 
-### Color (keyframes) — `.is-morphing`
+### answers.ts: no Answer type
 
-Color follows a non-monotonic 5-stop path: cold-white → cyan/sky → indigo → cyan/sky → cold-white. The 0% / 50% / 100% endpoints match the glass defaults, the 50% peak is the saturated indigo circle, and the 25% / 75% midpoints are the cyan/sky build-up and cool-down. Implemented as `@keyframes morph-color` (and `morph-color-dark` for dark mode) running 1000ms `ease-in-out forwards`.
-
-The state class is mounted for the entire 0–1000ms morph window by passing `isMorphing={isMorphing}` from `App.tsx` to `GlassCard`. It composes with `.is-shrinking` / `.is-expanding` (not mutually exclusive). Dark mode is handled by `html.dark .glass-card.is-morphing { animation-name: morph-color-dark; }` — no React-side dark branching needed.
-
-If you want to tweak the color arc (peak intensity, midpoint hue, etc.), edit the keyframes in `src/index.css` — do not put `background` or `box-shadow` back on the form classes, or the transition will fight the keyframes.
-
-The plan file at `C:\Users\raymondzylei\.claude\plans\task-md-buzzing-canyon.md` has the full design + a verified timing trace.
+`pickRandomAnswer()` returns a plain `string`. There is no `Answer` interface — the `category` field was never read by UI code and has been removed. `Category` is a module-local type alias in `answers.ts`, not exported.
 
 ## Theming
 
